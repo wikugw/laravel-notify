@@ -4,6 +4,7 @@ use App\Notifications\taskcompleted;
 use App\User;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    // User::find(2)->notify(new taskcompleted);
-    $users = user::all();
-    Notification::send($users, new taskcompleted());
+    // $when = Carbon::now()->addSeconds(10);
+    $user = user::find(2);
+    // User::find(2)->notify((new taskcompleted)->delay($when));
+    // Notification::send($users, new taskcompleted());
+    Notification::route('mail', 'taylor@example.com')
+        // ->route('nexmo', '5555555555')
+        // ->route('slack', 'https://hooks.slack.com/services/...')
+        ->notify(new taskcompleted($user));
     return view('welcome');
 });
 
